@@ -1,8 +1,7 @@
 # medium-posts-2026
 
-This is a collection of coding challenges I have
-found across the internet and decided to achieve in
-2025.
+This is a collection of my Medium blog posts I have
+written in 2026.
 
 ## Table Of Contents
 
