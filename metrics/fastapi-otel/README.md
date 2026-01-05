@@ -432,6 +432,72 @@ We can perform some of the basic optimizations:
 * Cache or speed up slow dependencies
 * Shorten background job execution
 
+Let's speed up our API routes by moving the large CPU-bound work into an asynchronous context:
+
+```python
+@app.get("/items/{item_id}")
+async def get_item(item_id: int) -> dict:
+    start = time.time()
+
+    with tracer.start_as_current_span("handler.get_item") as span:
+        span.set_attribute("item.id", item_id)
+
+        await faster_db_call_async()
+
+        # Optimized: offload CPU work
+        _ = await cpu_work_off_event_loop()
+
+        with tracer.start_as_current_span("post.processing"):
+            await asyncio.sleep(0.02)
+
+    duration_ms = (time.time() - start) * 1000.0
+    request_latency_ms.record(duration_ms, attributes={"route": "/items/{item_id}"})
+    return {"item_id": item_id, "status": "ok", "mode": "optimized"}
+
+
+@app.post("/process/{task_id}")
+async def process(task_id: str, background_tasks: BackgroundTasks) -> dict:
+    background_tasks.add_task(faster_background_job, task_id)
+    return {"status": "queued", "task_id": task_id, "mode": "optimized"}
+```
+
+We can also reduce our sleep durations (simulating DB some optimization):
+
+```python
+async def faster_db_call_async() -> None:
+    with tracer.start_as_current_span("db.query"):
+        # Simulate faster dependency (e.g., caching, better indexing)
+        await asyncio.sleep(0.08)
+
+
+def cpu_work_smaller() -> int:
+    """
+    Still CPU-bound, but reduced. More importantly, we won't run it on the event loop.
+    """
+    with tracer.start_as_current_span("cpu.work"):
+        total = 0
+        for i in range(7_000_000):
+            total += i
+        return total
+
+
+async def cpu_work_off_event_loop() -> int:
+    # Move CPU-bound work off the event loop thread
+    with tracer.start_as_current_span("cpu.work.offloaded"):
+        return await asyncio.to_thread(cpu_work_smaller)
+
+
+def faster_background_job(task_id: str) -> None:
+    start = time.time()
+    with tracer.start_as_current_span("background.job") as span:
+        span.set_attribute("task.id", task_id)
+        # Simulate optimized background work
+        time.sleep(0.2)
+
+    duration_ms = (time.time() - start) * 1000.0
+    bg_job_duration_ms.record(duration_ms, attributes={"task.type": "fast"})
+```
+
 Let's perform the same calls as we did to the slow application to see how the spans look:
 
 ```shell
