@@ -1,0 +1,32 @@
+[project]
+name = "fastapi-otel"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Alexander Foley",email = "alexandergfoley@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "opentelemetry-sdk (>=1.39.1,<2.0.0)",
+    "opentelemetry-exporter-prometheus (>=0.60b1,<0.61)",
+    "opentelemetry-api (>=1.39.1,<2.0.0)",
+    "opentelemetry-instrumentation-fastapi (>=0.60b1,<0.61)",
+    "opentelemetry-instrumentation-requests (>=0.60b1,<0.61)",
+    "opentelemetry-exporter-otlp (>=1.39.1,<2.0.0)",
+    "opentelemetry-instrumentation-asgi (>=0.60b1,<0.61)",
+    "fastapi (>=0.128.0,<0.129.0)",
+    "uvicorn (>=0.40.0,<0.41.0)",
+    "starlette (>=0.50.0,<0.51.0)",
+]
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.12.0"
+isort = "^7.0.0"

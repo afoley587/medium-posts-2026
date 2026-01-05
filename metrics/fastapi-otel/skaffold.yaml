@@ -1,0 +1,41 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: otel-fastapi
+build:
+  local:
+    push: false
+  artifacts:
+    - image: afoley587/coding-challenges/fastapi-otel
+      context: python/
+      docker:
+        dockerfile: Dockerfile
+
+deploy:
+  kubeContext: minikube
+  kubectl: {}
+
+manifests:
+  rawYaml:
+    - k8s/jaeger.yaml
+    - k8s/app-slow.yaml
+    - k8s/app-fast.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: jaeger
+    namespace: default
+    port: 16686
+    localPort: 16686
+
+  - resourceType: service
+    resourceName: fastapi-slow
+    namespace: default
+    port: 8000
+    localPort: 8000
+
+  - resourceType: service
+    resourceName: fastapi-fast
+    namespace: default
+    port: 8001
+    localPort: 8001

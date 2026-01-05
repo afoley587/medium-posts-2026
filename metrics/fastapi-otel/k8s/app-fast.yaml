@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-fast
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-fast
+  template:
+    metadata:
+      labels:
+        app: fastapi-fast
+    spec:
+      containers:
+        - name: app
+          image: afoley587/coding-challenges/fastapi-otel
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://jaeger:4318"
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://jaeger:4318/v1/traces"
+            - name: OTEL_SERVICE_NAME
+              value: "fastapi-demo-optimized"
+          args:
+            - python
+            - fast.py
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-fast
+spec:
+  selector:
+    app: fastapi-fast
+  ports:
+    - port: 8001
+      targetPort: 8000
