@@ -192,17 +192,38 @@ bg_job_duration_ms = meter.create_histogram(
 
 The above instantiates a few pieces of monitoring infrastructure:
 
-1. `Resource` - A `Resource` is an entity that
-   will produce telemtery.
-   This could be a service, API, or another library entirely.
+1. `Resource` – A `Resource` is an entity that will produce telemetry.
+    This could be a service, API, background worker, or even a library.
+    It defines what is emitting traces and metrics and provides identifying
+    attributes such as the service name, version, and environment.
+    All telemetry emitted by the application is automatically associated with
+    this resource.
 
-1. `TraceProvider`
+1. `TracerProvider` – A `TracerProvider` is responsible for creating and
+    configuring tracers.
+    It defines how traces are generated, what metadata is attached to them
+    (via the Resource), and how spans are processed before export.
+    Typically, a single `TracerProvider` is configured per application process.
 
-1. `OTLPSpanExporter`
+1. `OTLPSpanExporter` – An `OTLPSpanExporter` is responsible for exporting spans
+    out of the application using the OpenTelemetry Protocol (OTLP).
+    It sends trace data to a collector or backend such as Jaeger, Tempo, or a
+    managed observability platform.
+    Using OTLP keeps the application vendor-neutral and portable.
 
-1. `PrometheusMetricReader`
+1. `PrometheusMetricReader` – A `PrometheusMetricReader` exposes metrics in a
+    Prometheus-compatible format so they can be scraped over HTTP.
+    Rather than pushing metrics, it allows Prometheus to periodically pull
+    aggregated metric data from the application.
+    This enables alerting and visualization through tools like Prometheus and
+    Grafana.
 
-1. `MeterProvider`
+1. `MeterProvider` – A `MeterProvider` is the metrics counterpart to a
+    `TracerProvider`.
+    It is responsible for creating meters, registering metric readers, and
+    managing how metrics are aggregated and exported.
+    All metrics emitted by the application flow through the configured
+    `MeterProvider` and share the same Resource metadata.
 
 These will begin to form the backbone of the monitoring utilities.
 We can now add spans to traces, trace specific endpoints or functions, and
