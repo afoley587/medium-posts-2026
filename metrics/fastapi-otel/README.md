@@ -280,7 +280,7 @@ not just in production.
 We will use `skaffold` to automatically deploy `jaeger` and won't be going
 through the K8s manifests.
 If you're interested, please see the
-[GitHub repo]().
+[GitHub repo](https://github.com/afoley587/medium-posts-2026/tree/main/metrics/fastapi-otel/k8s).
 
 ## Finding the Bottleneck
 
@@ -464,4 +464,4 @@ But, with OTEL, you can add minimal code and gain:
 I hope you enjoyed following along!
 If you did, please clap for the story or follow me for other posts.
 As always, you can find all of the relevant code on
-[GitHub]().
+[GitHub](https://github.com/afoley587/medium-posts-2026/tree/main/metrics/fastapi-otel).
