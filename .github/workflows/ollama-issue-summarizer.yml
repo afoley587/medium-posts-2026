@@ -15,7 +15,7 @@ jobs:
         uses: ai-action/ollama-action@v2
         id: model
         with:
-          model: llama3.2
+          model: qwen2.5:0.5b
           prompt: |
             You are a GitHub issue triage assistant.
             Your job is to summarize the issue for maintainers.
