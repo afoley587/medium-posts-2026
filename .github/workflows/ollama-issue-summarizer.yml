@@ -2,20 +2,20 @@
 # yamllint disable rule:line-length
 on:
   issues:
-    types: [opened]
+    types: [opened]  # Run when a user opens an Issue
 
 permissions:
-  issues: write
+  issues: write  # Allow this workflow to read/comment on Issues
 
 jobs:
   summarize-issue:
     runs-on: ubuntu-latest
     steps:
       - name: Run model
-        uses: ai-action/ollama-action@v2
+        uses: ai-action/ollama-action@v2  # Run the ollama GitHub action which pulls/prompts the model
         id: model
         with:
-          model: qwen2.5:0.5b
+          model: qwen2.5:0.5b  # Use a small/fast model for demo
           prompt: |
             You are a GitHub issue triage assistant.
             Your job is to summarize the issue for maintainers.
@@ -56,7 +56,11 @@ jobs:
       - name: Comment summary on issue
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}  # Token with the permissions.issues: write
+          # With this script, we need to:
+          #     1. Get the github issue URL
+          #     2. Pull and format the issue summary
+          #     3. Post the comment to the issue via GitHub API
           script: |
             const issue_number = context.payload.issue.number;
             const owner = context.repo.owner;
