@@ -20,6 +20,10 @@ written in 2026.
    See the
    [FastAPI - OTEL project](./metrics/fastapi-otel/)
 
+1. May, 2026 - Linux OOM Killer and Kubernetes.
+   See
+   [Inside the Linux OOM Killer](./kubernetes/linux-oom-killer/)
+
 ## Contributing
 
 ### ASDF
