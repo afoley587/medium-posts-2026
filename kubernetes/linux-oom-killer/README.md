@@ -373,11 +373,9 @@ Kubernetes sets `oom_score_adj` based on pod QoS and memory requests.
 
 According to Kubernetes node-pressure eviction behavior:
 
-| QoS class | `oom_score_adj` behavior |
-| --- | --- |
-| `Guaranteed` | `-997` |
-| `BestEffort` | `1000` |
-| `Burstable` | `min(max(2, 1000 - (1000 * memoryRequestBytes) / machineMemoryCapacityBytes), 999)` |
+- `Guaranteed` QoS Class has a `oom_score_adj` of `-997`
+- `BestEffort` QoS Class has a `oom_score_adj` of `1000`
+- `Burstable` QoS Class has a `oom_score_adj` of `min(max(2, 1000 - (1000 * memoryRequestBytes) / machineMemoryCapacityBytes), 999)`
 
 This matters during node-level memory pressure. It does not let a container
 ignore its own memory limit. A `Guaranteed` pod with a 512 MiB memory limit can
@@ -831,14 +829,24 @@ This demonstrates QoS and eviction behavior under pressure.
 
 ## cgroup v1 And v2 Cheat Sheet
 
-| Question | cgroup v2 | cgroup v1 |
-| --- | --- | --- |
-| Current usage | `memory.current` | `memory.usage_in_bytes` |
-| Hard limit | `memory.max` | `memory.limit_in_bytes` |
-| Soft throttle | `memory.high` | mostly not equivalent |
-| Events | `memory.events` | `memory.failcnt` |
-| Stats | `memory.stat` | `memory.stat` |
-| Pressure | `memory.pressure` | PSI under `/proc/pressure/memory` |
+- Current Memory Usage:
+  - v2 - `memory.current`
+  - v1 - `memory.usage_in_bytes`
+- Hard limit
+  - v2 - `memory.max`
+  - v1 - `memory.limit_in_bytes`
+- Soft throttle
+  - v2 - `memory.high`
+  - v1 - mostly not equivalent
+- Events
+  - v2 - `memory.events`
+  - v1 - `memory.failcnt`
+- Stats
+  - v2 - `memory.stat`
+  - v1 - `memory.stat`
+- Pressure
+  - v2 - `memory.pressure`
+  - v1 - PSI under `/proc/pressure/memory`
 
 Useful cgroup v2 commands:
 
