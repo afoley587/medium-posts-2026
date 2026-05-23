@@ -82,15 +82,7 @@ It does not mean every pod is running.
 
 ## `kubectl apply` Is A Patch Operation
 
-`kubectl apply` is declarative in nature.
-You give Kubernetes the object shape you want, and Kubernetes computes how to
-merge it with the existing object.
-
-Modern Kubernetes uses server-side apply when requested with 
-[`--server-side`](https://kubernetes.io/docs/reference/using-api/server-side-apply/).
-
-Classic client-side apply computes a patch locally and stores the last applied
-configuration in an annotation.
+kubectl apply is declarative in nature, meaning that you give Kubernetes the object shape you want, and Kubernetes computes how to merge it with the existing object. There are two types of applies: Client Side and Server Side. Classic client-side apply computes a patch locally and stores the last applied configuration in an annotation. At the time of writing, client side apply is the default mechanism for Kubernetes. In a server side apply, the Kubernetes API server itself tracks the changes and records exactly which actor (or field manager) owns which specific fields within the object. Kubernetes uses server-side apply only when requested with the --server-side flag.
 
 For a Deployment, that request targets:
 
