@@ -24,26 +24,34 @@ written in 2026.
    See
    [Inside the Linux OOM Killer](./kubernetes/linux-oom-killer/)
 
+1. May, 2026 - Kubernetes control plane internals.
+   See
+   [kubectl apply control plane](./kubernetes/kubectl-apply-control-plane/)
+
 ## Contributing
 
 ### ASDF
 
-This repository is versioned by
-[`asdf`](https://asdf-vm.com/guide/getting-started.html).
+This repository is versioned by `asdf`.
+
+<https://asdf-vm.com/guide/getting-started.html>
 
 You can install all `asdf`-versioned binaries via:
 
 ```bash
-for plugin in $(awk '{ print $1 }' .tool-versions); do asdf plugin add "$plugin"; done
+for plugin in $(awk '{ print $1 }' .tool-versions); do
+  asdf plugin add "$plugin"
+done
 asdf install
 asdf reshim
 ```
 
 ### Pre-commit
 
-This repository uses
-[pre-commit](https://pre-commit.com/)
-to run a bunch of hooks before committing code.
+This repository uses pre-commit to run a bunch of hooks before committing code.
+
+<https://pre-commit.com/>
+
 This helps enforce things like code quality, formatting, etc.
 before getting to the PR stage.
 
